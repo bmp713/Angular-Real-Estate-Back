@@ -180,7 +180,7 @@ app.delete("/delete/:id", async (req, res) => {
         console.log('property =>', property);
 
         //await property.save();
-        //res.send( property );
+        res.send( property );
         //res.status(204).send();
     }catch(err){
         console.log(err);
