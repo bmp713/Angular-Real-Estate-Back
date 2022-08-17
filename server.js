@@ -98,7 +98,7 @@ app.get("/read", async (req, res) => {
         if(err) console.error(err);
         res.send(data);
     });
-}); 
+});  
 
 // Read product by id 
 app.get("/read/:id", async (req, res) => {
