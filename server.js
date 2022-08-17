@@ -71,14 +71,14 @@ const readProperties = async () => {
 
 
 //Initialize properties
-// fs.readFile('./products.json', 'utf8', (err, data) => {
-//     if(err) console.error(err);
-//     data = JSON.parse(data);
-//     data.forEach( (property) => {
-//         // console.log( "property =>", property );
-//         createProperty( property );
-//     });
-// });
+fs.readFile('./products.json', 'utf8', (err, data) => {
+    if(err) console.error(err);
+    data = JSON.parse(data);
+    data.forEach( (property) => {
+        // console.log( "property =>", property );
+        createProperty( property );
+    });
+});
 
 
 // Read products 
@@ -94,11 +94,11 @@ app.get("/read", async (req, res) => {
     }catch(err){};
 
     // Read from JSON
-    fs.readFile('./products.json', 'utf8', (err, data) => {
-        if(err) console.error(err);
-        res.send(data);
-    });
-});  
+    // fs.readFile('./products.json', 'utf8', (err, data) => {
+    //     if(err) console.error(err);
+    //     res.send(data);
+    // });
+}); 
 
 // Read product by id 
 app.get("/read/:id", async (req, res) => {
@@ -112,14 +112,14 @@ app.get("/read/:id", async (req, res) => {
             });
     }catch(err){};
 
-    fs.readFile('./products.json', 'utf8', (err, data) => {
-        if(err) console.error(err);
-        data = JSON.parse(data);
-        let product = data.find( item => {
-            return item.id === req.params.id;
-        });
-        //res.send( product );
-    });
+    // fs.readFile('./products.json', 'utf8', (err, data) => {
+    //     if(err) console.error(err);
+    //     data = JSON.parse(data);
+    //     let product = data.find( item => {
+    //         return item.id === req.params.id;
+    //     });
+    //     //res.send( product );
+    // });
 }); 
 
 
@@ -147,28 +147,28 @@ app.post("/update/:id", async (req, res) => {
     }
 
 
-    fs.readFile('./products.json', 'utf8', (err, data) => {
-        if(err) console.error(err);
+    // fs.readFile('./products.json', 'utf8', (err, data) => {
+    //     if(err) console.error(err);
 
-        data = JSON.parse(data);
+    //     data = JSON.parse(data);
 
-        let product = data.find( item => {
-            return item.id === req.params.id;
-        });
+    //     let product = data.find( item => {
+    //         return item.id === req.params.id;
+    //     });
 
-        product.city = req.body.city;
-        product.name = req.body.name;
-        product.type = req.body.type;
-        product.rooms = req.body.rooms;
-        product.price = req.body.price;
-        product.description = req.body.description;
+    //     product.city = req.body.city;
+    //     product.name = req.body.name;
+    //     product.type = req.body.type;
+    //     product.rooms = req.body.rooms;
+    //     product.price = req.body.price;
+    //     product.description = req.body.description;
 
-        fs.writeFileSync('./products.json', JSON.stringify(data, null, "\t"), err => {
-           if(err) console.error(err);
-        });
+    //     fs.writeFileSync('./products.json', JSON.stringify(data, null, "\t"), err => {
+    //        if(err) console.error(err);
+    //     });
         
-        //res.send( data );
-    });
+    //     //res.send( data );
+    // });
 }); 
 
 
@@ -185,22 +185,21 @@ app.delete("/delete/:id", async (req, res) => {
     }catch(err){
         console.log(err);
     }
+    // fs.readFile('./products.json', 'utf8', (err, data) => {
+    //     if(err) console.error(err);
 
-    fs.readFile('./products.json', 'utf8', (err, data) => {
-        if(err) console.error(err);
+    //     data = JSON.parse(data);
 
-        data = JSON.parse(data);
+    //     data = data.filter( item => {
+    //         return item.id !== req.params.id;
+    //     });
 
-        data = data.filter( item => {
-            return item.id !== req.params.id;
-        });
-
-        fs.writeFileSync('./products.json', JSON.stringify(data, null, "\t"), err => {
-           if(err) console.error(err);
-        });        
-    });
-    //res.send();
-    res.status(204).send();
+    //     fs.writeFileSync('./products.json', JSON.stringify(data), err => {
+    //        if(err) console.error(err);
+    //     });        
+    // });
+    // //res.send();
+    // res.status(204).send();
 
 }); 
 
