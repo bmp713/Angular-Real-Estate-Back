@@ -71,14 +71,14 @@ const readProperties = async () => {
 
 
 //Initialize properties
-// fs.readFile('./products.json', 'utf8', (err, data) => {
-//     if(err) console.error(err);
-//     data = JSON.parse(data);
-//     data.forEach( (property) => {
-//         // console.log( "property =>", property );
-//         createProperty( property );
-//     });
-// });
+fs.readFile('./products.json', 'utf8', (err, data) => {
+    if(err) console.error(err);
+    data = JSON.parse(data);
+    data.forEach( (property) => {
+        // console.log( "property =>", property );
+        createProperty( property );
+    });
+});
 
 
 // Read products 
