@@ -84,7 +84,7 @@ const readProperties = async () => {
 // Read products 
 app.get("/read", async (req, res) => {
     console.log("req.body =>", req.body);
-
+    
     try{
         readProperties()
             .then( (result) => {
