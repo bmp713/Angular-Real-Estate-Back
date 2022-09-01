@@ -100,6 +100,7 @@ app.get("/read", async (req, res) => {
     // });
 }); 
 
+
 // Read product by id 
 app.get("/read/:id", async (req, res) => {
     console.log("req.body =>", req.body);
