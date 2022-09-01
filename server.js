@@ -37,7 +37,7 @@ const connection = mongoose.connect(
 const createProperty = async (data) => {
     try{
         const property = await Properties.create(data);
-        console.log('property =>', property);
+        console.log('createProperty() =>', property);
         return property;
     }catch(err){
         console.log(err);
@@ -60,7 +60,7 @@ const readProperty = async (id) => {
 // Read properties
 const readProperties = async () => {
     try{
-        const properties = await Properties.find({});
+        const properties = await Properties.find({}).sort({ key: -1 });
         console.log('readProperties =>', properties);
         return properties;
     }catch(err){
@@ -107,7 +107,7 @@ app.get("/read/:id", async (req, res) => {
     try{
         readProperty( req.params.id )
             .then( (result) => {
-                console.log("readProperty API properties => ", result);
+                console.log("readProperty() API properties => ", result);
                 res.send(result);    
             });
     }catch(err){};
@@ -123,10 +123,40 @@ app.get("/read/:id", async (req, res) => {
 }); 
 
 
+// Create new property
+app.post("/create", async (req, res) => {
+
+    // atlas {id: '1238297227321240'}
+    console.log("/create POST req.body =>", req.body);
+
+    try{
+        let property = {
+            id: req.body.id,
+            city: req.body.city,
+            name: req.body.name,
+            type: req.body.type,
+            description: req.body.description,
+            rooms: req.body.rooms,
+            price: req.body.price,
+            img: '../assets/' + req.body.image.replace("C:\\fakepath\\", "")
+        }
+
+        console.log("/create property =", property);
+        createProperty(property);
+
+        //await property.save();
+        res.send( property );
+
+    }catch(err){
+        console.log(err);
+    }
+
+}); 
+
 
 // Update product
 app.post("/update/:id", async (req, res) => {
-    console.log("POST req.body =>", req.body);
+    console.log("/update POST req.body =>", req.body);
 
     try{
         const property = await Properties.findOne({id:req.params.id});
