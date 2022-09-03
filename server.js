@@ -144,9 +144,9 @@ app.post("/create", async (req, res) => {
             description: req.body.description,
             rooms: req.body.rooms,
             price: req.body.price,
-            img: `http://angular-real-estate-back.herokuapp.com/assets/${this.image}`
+            img: `http://angular-real-estate-back.herokuapp.com/assets/${imageName}`
         }
-        // img: `http://angular-real-estate-back.herokuapp.com/assets/${this.image}`
+        // img: `http://angular-real-estate-back.herokuapp.com/assets/${imageName}`
         // img: `http://localhost:4000/assets/${imageName}`
 
         console.log("/create property =", property);
