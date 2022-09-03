@@ -144,9 +144,10 @@ app.post("/create", async (req, res) => {
             description: req.body.description,
             rooms: req.body.rooms,
             price: req.body.price,
-            img: `http://localhost:4000/assets/${imageName}`
+            img: `http://angular-real-estate-back.herokuapp.com/assets/${this.image}`
         }
-        // img: '../assets/' + req.body.images.replace("C:\\fakepath\\", "")
+        // img: `http://angular-real-estate-back.herokuapp.com/assets/${this.image}`
+        // img: `http://localhost:4000/assets/${imageName}`
 
         console.log("/create property =", property);
         createProperty(property);
@@ -251,6 +252,7 @@ const storage = multer.diskStorage({
         console.log(file.mimetype);
         console.log("file = ", file);
 
+
         cb(null, Date.now() + '.jpg')  
         // cb(null, file.originalfilename);  
     }
@@ -267,6 +269,7 @@ app.post("/upload", upload.single("image"), async (req, res) => {
     console.log("/upload req.file =>", req.file);
     // console.log("/upload req.file.filename =>", req.file.filename);
     console.log("/upload req.file.originalname =>", req.file.originalname);
+    
     imageName = req.file.filename;
 
     try{
