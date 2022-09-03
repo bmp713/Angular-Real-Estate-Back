@@ -11,11 +11,14 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
+app.use(express.static('public')); 
+app.use('/assets', express.static('assets'));
 
 app.listen(port, () => { 
     console.log('Server listening on port', port) 
 });
 
+const imageUpload = null;
 
 // MongoDB Atlas
 const mongoose = require('mongoose'); 
@@ -44,6 +47,7 @@ const createProperty = async (data) => {
     }
 }
 
+
 // Read property
 const readProperty = async (id) => {
     console.log("readProperty id =>",id);
@@ -60,7 +64,9 @@ const readProperty = async (id) => {
 // Read properties
 const readProperties = async () => {
     try{
-        const properties = await Properties.find({}).sort({ key: -1 });
+        // const properties = await Properties.find({},{"_id":1,_id:0}).sort({"_id":-1});
+        const properties = await Properties.find({});
+
         console.log('readProperties =>', properties);
         return properties;
     }catch(err){
@@ -127,7 +133,6 @@ app.get("/read/:id", async (req, res) => {
 // Create new property
 app.post("/create", async (req, res) => {
 
-    // atlas {id: '1238297227321240'}
     console.log("/create POST req.body =>", req.body);
 
     try{
@@ -139,8 +144,9 @@ app.post("/create", async (req, res) => {
             description: req.body.description,
             rooms: req.body.rooms,
             price: req.body.price,
-            img: '../assets/' + req.body.image.replace("C:\\fakepath\\", "")
+            img: `http://localhost:4000/assets/${imageName}`
         }
+        // img: '../assets/' + req.body.images.replace("C:\\fakepath\\", "")
 
         console.log("/create property =", property);
         createProperty(property);
@@ -233,6 +239,48 @@ app.delete("/delete/:id", async (req, res) => {
     // res.status(204).send();
 
 }); 
+
+
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "./assets/")
+    },
+    filename: function (req, file, cb) {
+        console.log(file.mimetype);
+        console.log("file = ", file);
+
+        cb(null, Date.now() + '.jpg')  
+        // cb(null, file.originalfilename);  
+    }
+});
+const upload = multer({
+    storage: storage
+})
+
+
+// Upload new image
+app.post("/upload", upload.single("image"), async (req, res) => {
+
+    // console.log("/upload POST req.body =>", req.body);
+    console.log("/upload req.file =>", req.file);
+    // console.log("/upload req.file.filename =>", req.file.filename);
+    console.log("/upload req.file.originalname =>", req.file.originalname);
+    imageName = req.file.filename;
+
+    try{
+        res.send(req.file);
+    }catch(err){
+        console.log(err);
+    }
+
+}); 
+
+// // Send image to display
+// app.get("/:image", (req, res) => {
+//     res.sendFile(path.join(__dirname, "./assets/"+ image));
+// });
 
 
 
