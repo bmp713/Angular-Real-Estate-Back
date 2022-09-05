@@ -20,7 +20,22 @@ app.listen(port, () => {
 });
 
 // Handle for file name 
-const imageUpload = null;
+// const imageUpload = null;
+
+
+// Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyBHgOaPFiBZ5Uh3LZLTXqcWwtQl5w-JEtQ",
+    authDomain: "node-real-estate-d86a8.firebaseapp.com",
+    projectId: "node-real-estate-d86a8",
+    storageBucket: "node-real-estate-d86a8.appspot.com",
+    messagingSenderId: "937364880252",
+    appId: "1:937364880252:web:881f08b151198ec25fc2f9",
+    measurementId: "G-TQLPGEFEJX"
+};
+
+const { initializeApp } = require('firebase-admin/app');
+const { ref, getStorage, getDownloadURL, uploadBytes } = require("firebase/storage");
 
 
 // MongoDB Atlas for data
@@ -154,6 +169,7 @@ app.post("/update/:id", async (req, res) => {
         property.rooms = req.body.rooms;
         property.price = req.body.price;
         property.description = req.body.description;
+        property.img = req.body.img;
 
         await property.save();
         res.send( property );
@@ -213,7 +229,29 @@ app.post("/upload", upload.single("image"), async (req, res) => {
     // Pass new name of file to create() 
     imageName = req.file.filename;
 
+
     // Upload image file to Firestore, S3
+    // Initialize Cloud Storage reference
+    // const firebase = initializeApp(firebaseConfig);
+    // const storage = getStorage(firebase);
+
+    // const file = req.file.filename;
+    // const storageRef = ref(storage, 'assets/'+ file.name );
+
+    // uploadBytes(storageRef, file )
+    //     .then( (snapshot) => {
+    //         console.log('server.js => Uploaded file, ', file);
+    //         console.log('server.js => snapshot =>', snapshot);
+
+    //         getDownloadURL(snapshot.ref).then( (url) => {
+    //             console.log('getDownloadURL() url =>', url);
+    //             this.url =  url;
+    //         });
+    //     })
+    //     .catch( (error) => {
+    //         console.log("File error =>", error);
+    //     })
+
 
     try{
         res.send(req.file);
