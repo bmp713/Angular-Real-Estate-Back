@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 const cors = require('cors');
 const express = require('express');
@@ -18,9 +19,11 @@ app.listen(port, () => {
     console.log('Server listening on port', port) 
 });
 
+// Handle for file name 
 const imageUpload = null;
 
-// MongoDB Atlas
+
+// MongoDB Atlas for data
 const mongoose = require('mongoose'); 
 const Properties = require("./properties");
 
@@ -35,12 +38,11 @@ const connection = mongoose.connect(
         console.error(`Error connecting to the database. n${err}`);
     })
 
-
 // Create new properties
 const createProperty = async (data) => {
     try{
         const property = await Properties.create(data);
-        console.log('createProperty() =>', property);
+        console.log('server.js => createProperty() =>', property);
         return property;
     }catch(err){
         console.log(err);
@@ -53,7 +55,7 @@ const readProperty = async (id) => {
     console.log("readProperty id =>",id);
     try{
         const property = await Properties.findOne({id:id});
-        console.log('readProperty =>', property);
+        //console.log('readProperty =>', property);
         return property;
     }catch(err){
         console.log(err);
@@ -67,24 +69,13 @@ const readProperties = async () => {
         // const properties = await Properties.find({},{"_id":1,_id:0}).sort({"_id":-1});
         const properties = await Properties.find({});
 
-        console.log('readProperties =>', properties);
+        //console.log('readProperties =>', properties);
         return properties;
     }catch(err){
         console.log(err);
     }
 }
 //readProperties();
-
-
-//Initialize properties
-// fs.readFile('./products.json', 'utf8', (err, data) => {
-//     if(err) console.error(err);
-//     data = JSON.parse(data);
-//     data.forEach( (property) => {
-//         // console.log( "property =>", property );
-//         createProperty( property );
-//     });
-// });
 
 
 // Read products 
@@ -94,16 +85,11 @@ app.get("/read", async (req, res) => {
     try{
         readProperties()
             .then( (result) => {
-                console.log("API properties => ", result);
+                //console.log("API properties => ", result);
                 res.send(result);     
             });
     }catch(err){};
 
-    // Read from JSON
-    // fs.readFile('./products.json', 'utf8', (err, data) => {
-    //     if(err) console.error(err);
-    //     res.send(data);
-    // });
 }); 
 
 
@@ -114,19 +100,10 @@ app.get("/read/:id", async (req, res) => {
     try{
         readProperty( req.params.id )
             .then( (result) => {
-                console.log("readProperty() API properties => ", result);
+                //console.log("readProperty() API properties => ", result);
                 res.send(result);    
             });
     }catch(err){};
-
-    // fs.readFile('./products.json', 'utf8', (err, data) => {
-    //     if(err) console.error(err);
-    //     data = JSON.parse(data);
-    //     let product = data.find( item => {
-    //         return item.id === req.params.id;
-    //     });
-    //     //res.send( product );
-    // });
 }); 
 
 
@@ -144,10 +121,11 @@ app.post("/create", async (req, res) => {
             description: req.body.description,
             rooms: req.body.rooms,
             price: req.body.price,
-            img: `http://angular-real-estate-back.herokuapp.com/assets/${imageName}`
+            img: req.body.img
         }
-        // img: `http://angular-real-estate-back.herokuapp.com/assets/${imageName}`
-        // img: `http://localhost:4000/assets/${imageName}`
+        //img: `http://angular-real-estate-back.herokuapp.com/assets/${imageName}`
+        //img: `http://localhost:4000/assets/${imageName}`
+        //img: `../assets/${imageName}`
 
         console.log("/create property =", property);
         createProperty(property);
@@ -184,29 +162,6 @@ app.post("/update/:id", async (req, res) => {
         console.log(err);
     }
 
-
-    // fs.readFile('./products.json', 'utf8', (err, data) => {
-    //     if(err) console.error(err);
-
-    //     data = JSON.parse(data);
-
-    //     let product = data.find( item => {
-    //         return item.id === req.params.id;
-    //     });
-
-    //     product.city = req.body.city;
-    //     product.name = req.body.name;
-    //     product.type = req.body.type;
-    //     product.rooms = req.body.rooms;
-    //     product.price = req.body.price;
-    //     product.description = req.body.description;
-
-    //     fs.writeFileSync('./products.json', JSON.stringify(data, null, "\t"), err => {
-    //        if(err) console.error(err);
-    //     });
-        
-    //     //res.send( data );
-    // });
 }); 
 
 
@@ -223,25 +178,11 @@ app.delete("/delete/:id", async (req, res) => {
     }catch(err){
         console.log(err);
     }
-    // fs.readFile('./products.json', 'utf8', (err, data) => {
-    //     if(err) console.error(err);
-
-    //     data = JSON.parse(data);
-
-    //     data = data.filter( item => {
-    //         return item.id !== req.params.id;
-    //     });
-
-    //     fs.writeFileSync('./products.json', JSON.stringify(data), err => {
-    //        if(err) console.error(err);
-    //     });        
-    // });
-    // //res.send();
-    // res.status(204).send();
 
 }); 
 
 
+// Access file from multer
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -251,7 +192,6 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
         console.log(file.mimetype);
         console.log("file = ", file);
-
 
         cb(null, Date.now() + '.jpg')  
         // cb(null, file.originalfilename);  
@@ -265,12 +205,15 @@ const upload = multer({
 // Upload new image
 app.post("/upload", upload.single("image"), async (req, res) => {
 
-    // console.log("/upload POST req.body =>", req.body);
     console.log("/upload req.file =>", req.file);
-    // console.log("/upload req.file.filename =>", req.file.filename);
+    console.log("/upload POST req.body =>", req.body);
+    console.log("/upload req.file.filename =>", req.file.filename);
     console.log("/upload req.file.originalname =>", req.file.originalname);
     
+    // Pass new name of file to create() 
     imageName = req.file.filename;
+
+    // Upload image file to Firestore, S3
 
     try{
         res.send(req.file);
@@ -278,12 +221,8 @@ app.post("/upload", upload.single("image"), async (req, res) => {
         console.log(err);
     }
 
+ 
 }); 
-
-// // Send image to display
-// app.get("/:image", (req, res) => {
-//     res.sendFile(path.join(__dirname, "./assets/"+ image));
-// });
 
 
 

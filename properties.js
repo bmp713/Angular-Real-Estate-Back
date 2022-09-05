@@ -8,7 +8,11 @@ const propertiesSchema = new mongoose.Schema({
     description: String,
     rooms: String,
     price: String,
-    img: String
+    img: String,
+    // image: {
+    //     data: Buffer,
+    //     contentType: String
+    // }
 });
 
 module.exports = mongoose.model('Properties', propertiesSchema);
